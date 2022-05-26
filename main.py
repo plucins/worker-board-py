@@ -30,5 +30,16 @@ async def create_repair_case(repaircase: _schemas._CreateRepairCase,
 
 
 @app.get("/api/repair-case", response_model=List[_schemas._RepairCase])
-async def get_repaircases(db: _orm.Session = _fastapi.Depends(_services.get_db)):
-    return await _services.get_repaircases(db=db)
+async def get_repair_cases(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_repair_cases(db=db)
+
+
+@app.get("/api/repair-case/{id}", response_model=_schemas._RepairCase)
+async def get_repair_cases_by_id(id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_repair_cases_by_id(id=id, db=db)
+
+
+@app.delete("/api/repair-case/{id}")
+async def delete_repair_cases_by_id(id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    await _services.delete_repair_cases_by_id(id=id, db=db)
+    return "ok"

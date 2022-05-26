@@ -45,6 +45,10 @@ class _Equipment(_pydantic.BaseModel):
     class Config:
         use_enum_values = True
 
+    class Meta:
+        include_relationships = True
+        load_instance = True
+
 
 class _BaseRepairCase(_pydantic.BaseModel):
     title: str
@@ -61,6 +65,11 @@ class _RepairCase(_BaseRepairCase):
 
     class Config:
         orm_mode = True
+        use_enum_values = True
+
+    class Meta:
+        include_relationships = True
+        load_instance = True
 
 
 class _CreateRepairCase(_BaseRepairCase):
