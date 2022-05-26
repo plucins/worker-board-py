@@ -24,7 +24,7 @@ async def say_hello(name: str):
 
 
 @app.post("/api/repair-case", response_model=_schemas._RepairCase)
-async def create_repair_case(repaircase: _schemas._CreateRepairCase,
+async def create_repair_case(repaircase: _schemas._RepairCase,
                              db: _orm.Session = _fastapi.Depends(_services.get_db), ):
     return await _services.create_repair_case(repaircase=repaircase, db=db)
 
@@ -43,3 +43,8 @@ async def get_repair_cases_by_id(id: int, db: _orm.Session = _fastapi.Depends(_s
 async def delete_repair_cases_by_id(id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     await _services.delete_repair_cases_by_id(id=id, db=db)
     return "ok"
+
+
+@app.post("/api/worker", response_model=_schemas._Worker)
+async def create_worker(worker: _schemas._Worker, db: _orm.Session = _fastapi.Depends(_services.get_db), ):
+    return await _services.create_worker(worker=worker, db=db)

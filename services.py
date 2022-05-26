@@ -20,8 +20,13 @@ def get_db():
         db.close()
 
 
-async def create_repair_case(repaircase: _schemas._CreateRepairCase, db: "Session") -> _schemas._RepairCase:
-    repaircase = _models.RepairCase(**repaircase.dict())
+async def create_repair_case(repaircase: _schemas._RepairCase, db: "Session") -> _schemas._RepairCase:
+    eqipment_owner = _models.Owner(**repaircase.equipment.owner.dict())
+    equipment = _models.Equipment(owner=eqipment_owner, type=repaircase.equipment.type, mark=repaircase.equipment.mark,
+                                  model=repaircase.equipment.model)
+
+    repaircase = _models.RepairCase(title=repaircase.title, description=repaircase.description,
+                                    equipment=equipment)
     repaircase.caseStatus = _models.CaseStatus.new.value
     db.add(repaircase)
     db.commit()
@@ -49,3 +54,12 @@ async def delete_repair_cases_by_id(id: int, db: "Session"):
 
     db.delete(repaircase)
     db.commit()
+
+
+async def create_worker(worker: _schemas._Worker, db: "Session") -> _schemas._Worker:
+    worker = _models.Worker(**worker.dict())
+    db.add(worker)
+    db.commit()
+    db.flush()
+    db.refresh(worker)
+    return _schemas._Worker.from_orm(worker)

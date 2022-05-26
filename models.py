@@ -44,11 +44,11 @@ class Worker(_database.Base):
 class Equipment(_database.Base):
     __tablename__ = 'equipment'
     id = _sql.Column(_sql.Integer, primary_key=True, index=True)
-    type = _sql.Column(_sql.Enum(EquipmentType))
+    type = _sql.Column(_sql.String, nullable=False)
     mark = _sql.Column(_sql.String, nullable=False)
     model = _sql.Column(_sql.String, nullable=False)
     owner_id = _sql.Column(_sql.Integer, _sql.ForeignKey('owner.id'), unique=True)
-    owner = relationship("Owner", backref=backref("repair-case", uselist=False))
+    owner = relationship("Owner", backref="equipment", uselist=False)
 
 
 class RepairCase(_database.Base):
@@ -58,8 +58,8 @@ class RepairCase(_database.Base):
     description = _sql.Column(_sql.String, nullable=False)
     caseStatus = _sql.Column('caseStatus', _sql.String)
     worker_id = _sql.Column(_sql.Integer, _sql.ForeignKey('worker.id'), unique=True)
-    worker = relationship("Worker", backref=backref("repair-case", uselist=False))
+    worker = relationship("Worker", backref="repair-case", uselist=False)
     registrationTime = _sql.Column(_sql.DateTime, default=_dt.datetime.now())
     lastUpdate = _sql.Column(_sql.DateTime, default=_dt.datetime.now())
     equipment_id = _sql.Column(_sql.Integer, _sql.ForeignKey('equipment.id'), unique=True)
-    equipment = relationship("Equipment", backref=backref("repair-case", uselist=False))
+    equipment = relationship("Equipment", backref="repair-case", uselist=False)

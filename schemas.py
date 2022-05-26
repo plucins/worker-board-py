@@ -26,24 +26,30 @@ class _UserRole(str, _enum.Enum):
 
 
 class _Owner(_pydantic.BaseModel):
+    id: Optional[int]
     firstName: str
     lastName: str
     phoneNumber: str
 
+    class Config:
+        orm_mode = True
+        use_enum_values = True
 
-class _Worker(_pydantic.BaseModel):
-    firstName: str
-    lastName: str
+    class Meta:
+        include_relationships = True
+        load_instance = True
 
 
 class _Equipment(_pydantic.BaseModel):
-    type: _EquipmentType
+    id: Optional[int]
+    type: str
     mark: str
     model: str
     owner: _Owner
 
     class Config:
         use_enum_values = True
+        orm_mode = True
 
     class Meta:
         include_relationships = True
@@ -55,8 +61,22 @@ class _BaseRepairCase(_pydantic.BaseModel):
     description: str
 
 
+class _Worker(_pydantic.BaseModel):
+    id: Optional[int]
+    firstName: str
+    lastName: str
+
+    class Config:
+        orm_mode = True
+        use_enum_values = True
+
+    class Meta:
+        include_relationships = True
+        load_instance = True
+
+
 class _RepairCase(_BaseRepairCase):
-    id: int
+    id: Optional[int]
     caseStatus: str
     worker: Optional[_Worker]
     registrationTime: _dt.datetime
