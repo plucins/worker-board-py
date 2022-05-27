@@ -12,20 +12,9 @@ if TYPE_CHECKING:
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    _services._create_database()
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-
 @app.post("/api/repair-case", response_model=_schemas._RepairCase)
 async def create_repair_case(repaircase: _schemas._RepairCase,
-                             db: _orm.Session = _fastapi.Depends(_services.get_db), ):
+                             db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.create_repair_case(repaircase=repaircase, db=db)
 
 
@@ -46,5 +35,11 @@ async def delete_repair_cases_by_id(id: int, db: _orm.Session = _fastapi.Depends
 
 
 @app.post("/api/worker", response_model=_schemas._Worker)
-async def create_worker(worker: _schemas._Worker, db: _orm.Session = _fastapi.Depends(_services.get_db), ):
+async def create_worker(worker: _schemas._Worker, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.create_worker(worker=worker, db=db)
+
+
+@app.put("/api/repair-case/{id}", response_model=_schemas._RepairCase)
+async def update_repair_case(id: int, repaircase: _schemas._RepairCase,
+                             db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.update_repair_case(id=id, db=db, repaircase=repaircase)
