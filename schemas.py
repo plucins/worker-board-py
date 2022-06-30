@@ -79,8 +79,8 @@ class _RepairCase(_BaseRepairCase):
     id: Optional[int]
     caseStatus: str
     worker: Optional[_Worker]
-    registrationTime: _dt.datetime
-    lastUpdate: _dt.datetime
+    registrationTime: Optional[_dt.datetime]
+    lastUpdate: Optional[_dt.datetime]
     equipment: Optional[_Equipment]
 
     class Config:

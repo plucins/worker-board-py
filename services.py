@@ -26,8 +26,11 @@ async def create_repair_case(repaircase: _schemas._RepairCase, db: "Session") ->
     equipment = _models.Equipment(owner=eqipment_owner, type=repaircase.equipment.type, mark=repaircase.equipment.mark,
                                   model=repaircase.equipment.model)
 
+    if repaircase.worker.firstName is not None:
+        worker = _models.Worker(firstName=repaircase.worker.firstName, lastName=repaircase.worker.lastName)
+
     repaircase = _models.RepairCase(title=repaircase.title, description=repaircase.description,
-                                    equipment=equipment)
+                                    equipment=equipment, worker=worker)
     repaircase.caseStatus = _models.CaseStatus.new.value
     db.add(repaircase)
     db.commit()

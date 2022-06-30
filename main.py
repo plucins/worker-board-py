@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, List
 import fastapi as _fastapi
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 import services as _services
 import schemas as _schemas
@@ -10,6 +11,19 @@ if TYPE_CHECKING:
     from sqlalchemy.orm import Session
 
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://localhost:4200",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/api/repair-case", response_model=_schemas._RepairCase)
